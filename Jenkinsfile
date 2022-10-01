@@ -13,4 +13,16 @@ node {
             junit 'test-reports/results.xml'
         }
     }
+
+    stage('Manual Approval') {
+        input message: 'Lanjut tahap deploy? (Klik "Proceed" untuk ke teahap deploy)'
+    }
+
+    stage('Deploy') {
+        docker.image('cdrx/pyinstaller-linux:python2').inside {
+            sh 'pyinstaller --onefile sources/add2vals.py'
+
+            archiveArtifacts 'dist/add2vals'
+        }
+    }
 }
